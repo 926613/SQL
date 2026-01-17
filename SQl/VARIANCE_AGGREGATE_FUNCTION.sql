@@ -1,0 +1,13 @@
+SELECT
+PRODUCTID, 
+VARIANCE
+FROM(
+	SELECT
+	ProductID,
+	ISNULL(VAR(SALES), 0) [VARIANCE]
+	FROM Sales.Orders
+	GROUP BY ProductID
+) T WHERE VARIANCE = (SELECT MAX(VARIANCE) FROM (
+							SELECT ProductID,  VAR(Sales) [VARIANCE] FROM Sales.Orders 
+							   GROUP BY ProductID)T
+							)
